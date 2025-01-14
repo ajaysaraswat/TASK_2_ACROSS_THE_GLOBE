@@ -14,8 +14,12 @@ app.get("/", async (req, res) => {
 				},
 			}
 		);
+		const coinsname = response.data.map((coin) => ({
+			name: coin.name,
+			id: coin.id,
+		}));
 		// Send the data field from the response
-		return res.json({ response: response.data });
+		return res.json({ response: coinsname });
 	} catch (error) {
 		// Handle errors gracefully
 		console.error("Error fetching data from API:", error.message);
