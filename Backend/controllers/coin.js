@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 const handlegetCoinData = async (req, res) => {
 	try {
 		// Fetch data from the API
@@ -10,11 +12,16 @@ const handlegetCoinData = async (req, res) => {
 			}
 		);
 		const coinsname = response.data.map((coin) => ({
-			name: coin.name,
 			id: coin.id,
+			symbol: coin.symbol,
+			image: coin.image,
+			name: coin.name,
+			current_price: coin.current_price,
 		}));
 		// Send the data field from the response
-		return res.json({ response: coinsname });
+		return res.status(200).render("home", {
+			cryptocurrencies: coinsname,
+		});
 	} catch (error) {
 		// Handle errors gracefully
 		console.error("Error fetching data from API:", error.message);

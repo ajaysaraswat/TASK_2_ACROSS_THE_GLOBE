@@ -1,0 +1,68 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<title>HomePage</title>
+	</head>
+	<body class="bg-gray-100">
+		<%- include('./partials/nav') %>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+	</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Cryptocurrency Prices</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+	</head>
+	<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+		<header class="bg-blue-600 text-white w-full py-4 shadow-md">
+			<h1 class="text-3xl text-center font-bold">Cryptocurrency Prices</h1>
+		</header>
+
+		<main class="mt-8 w-full max-w-4xl mx-auto">
+			<div class="bg-white shadow-md rounded-lg overflow-hidden">
+				<table class="table-auto w-full border-collapse">
+					<thead class="bg-blue-600 text-white">
+						<tr>
+							<th class="px-4 py-2 text-left">#</th>
+							<th class="px-4 py-2 text-left">Image</th>
+							<th class="px-4 py-2 text-left">Name</th>
+							<th class="px-4 py-2 text-left">Symbol</th>
+							<th class="px-4 py-2 text-right">Current Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% cryptocurrencies.forEach((coin, index) => { %>
+						<tr class="<%= index % 2 === 0 ? 'bg-gray-100' : 'bg-white' %>">
+							<td class="px-4 py-2"><%= index + 1 %></td>
+							<td class="px-4 py-2">
+								<img
+									src="<%= coin.image %>"
+									alt="<%= coin.name %>"
+									class="w-8 h-8"
+								/>
+							</td>
+							<td class="px-4 py-2 font-bold"><%= coin.name %></td>
+							<td class="px-4 py-2 uppercase"><%= coin.symbol %></td>
+							<td class="px-4 py-2 text-right">
+								$<%= coin.current_price.toFixed(2) %>
+							</td>
+						</tr>
+						<% }); %>
+					</tbody>
+				</table>
+			</div>
+		</main>
+
+		<footer class="mt-8 py-4 bg-gray-800 text-white text-center w-full">
+			<p>© 2025 Crypto Monitor. All Rights Reserved.</p>
+		</footer>
+	</body>
+</html>
