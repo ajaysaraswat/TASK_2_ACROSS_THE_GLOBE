@@ -37,7 +37,7 @@ async function monitorAlerts(latestPrices) {
 			const { userId, symbol, condition, targetPrice } = alert;
 			if (latestPrices[symbol]) {
 				const currentPrice = latestPrices[symbol].price;
-				console.log("current price", currentPrice.price);
+				// console.log("current price", currentPrice.price);
 				const conditionMet =
 					(condition === "greaterThan" && currentPrice > targetPrice) ||
 					(condition === "lessThan" && currentPrice < targetPrice);

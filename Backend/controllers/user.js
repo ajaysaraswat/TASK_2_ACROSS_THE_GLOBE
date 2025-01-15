@@ -18,6 +18,26 @@ const handlepostuser = async (req, res) => {
 	}
 };
 
+const handlepostsignin = async (req, res) => {
+	const { email, password } = req.body;
+
+	try {
+		const uid = await User.matchPasswordandGenerateToken(email, password);
+
+		res.cookie("uid", uid);
+		return res.redirect("/");
+	} catch (err) {
+		return res.redirect("/user/signup", {
+			message: "Invalid user or password",
+		});
+	}
+};
+
+const handlelogout = (req, res) => {
+	res.clearCookie("uid").redirect("/user/signin");
+};
 module.exports = {
 	handlepostuser,
+	handlepostsignin,
+	handlelogout,
 };
