@@ -43,7 +43,7 @@
 		<script>
 			const socket = io("http://localhost:8000");
 
-			// Map to keep track of existing rows
+			// Map to keep track of rows by currency symbol
 			const coinMap = new Map();
 			const tableBody = document.getElementById("crypto-table");
 
@@ -52,7 +52,7 @@
 				if (Array.isArray(data)) {
 					data.forEach((coin, index) => {
 						if (coinMap.has(coin.symbol)) {
-							// Update existing row
+							// Update the existing row
 							const row = coinMap.get(coin.symbol);
 							row.querySelector(".price").textContent = `$${coin.price.toFixed(
 								2
@@ -60,25 +60,31 @@
 							row.querySelector(".timestamp").textContent =
 								new Date().toLocaleString();
 						} else {
-							// Create a new row
+							// Create a new row for the new currency
 							const row = document.createElement("tr");
 							row.innerHTML = `
-                <td class="border px-4 py-2">${index + 1}</td>
-                <td class="border px-4 py-2">
-                  <img src="${coin.image}" alt="${coin.name}" class="w-8 h-8">
-                </td>
-                <td class="border px-4 py-2">${coin.name}</td>
-                <td class="border px-4 py-2">${coin.symbol.toUpperCase()}</td>
-                <td class="border px-4 py-2 text-right price">
-                  $${coin.price.toFixed(2)}
-                </td>
-                <td class="border px-4 py-2 timestamp">
-                  ${new Date().toLocaleString()}
-                </td>
-              `;
+					<td class="border px-4 py-2 index"></td>
+					<td class="border px-4 py-2">
+						<img src="${coin.image}" alt="${coin.name}" class="w-8 h-8">
+					</td>
+					<td class="border px-4 py-2">${coin.name}</td>
+					<td class="border px-4 py-2">${coin.symbol.toUpperCase()}</td>
+					<td class="border px-4 py-2 text-right price">
+						$${coin.price.toFixed(2)}
+					</td>
+					<td class="border px-4 py-2 timestamp">
+						${new Date().toLocaleString()}
+					</td>
+				`;
 							tableBody.appendChild(row);
 							coinMap.set(coin.symbol, row);
 						}
+					});
+
+					// Update the index for all rows
+					let rowIndex = 1;
+					coinMap.forEach((row) => {
+						row.querySelector(".index").textContent = rowIndex++;
 					});
 				} else {
 					console.error("Received data is not an array");
