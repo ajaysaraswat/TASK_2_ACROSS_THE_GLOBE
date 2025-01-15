@@ -17,3 +17,7 @@ const handlepostuser = async (req, res) => {
 		return res.redirect("/");
 	}
 };
+
+module.exports = {
+	handlepostuser,
+};
