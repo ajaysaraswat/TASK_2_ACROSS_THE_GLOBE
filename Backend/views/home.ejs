@@ -23,6 +23,7 @@
 							<th class="px-4 py-2 text-left">Name</th>
 							<th class="px-4 py-2 text-left">Symbol</th>
 							<th class="px-4 py-2 text-right">Current Price (USD)</th>
+							<th class="px-4 py-2 text-left">Timestamp</th>
 						</tr>
 					</thead>
 					<tbody id="crypto-table">
@@ -42,25 +43,55 @@
 		<script>
 			const socket = io("http://localhost:8000");
 
-			socket.on("cryptoPrices", (data) => {
-				const tableBody = document.getElementById("crypto-table");
-				tableBody.innerHTML = ""; // Clear old data
+			// Map to keep track of existing rows
+			const coinMap = new Map();
+			const tableBody = document.getElementById("crypto-table");
 
-				data.forEach((coin, index) => {
-					const row = document.createElement("tr");
-					row.innerHTML = `
-            <td class="border px-4 py-2">${index + 1}</td>
-            <td class="border px-4 py-2"><img src="${coin.image}" alt="${
-						coin.name
-					}" class="w-8 h-8"></td>
-            <td class="border px-4 py-2">${coin.name}</td>
-            <td class="border px-4 py-2">${coin.symbol.toUpperCase()}</td>
-            <td class="border px-4 py-2 text-right">$${coin.current_price.toFixed(
-							2
-						)}</td>
-          `;
-					tableBody.appendChild(row);
-				});
+			socket.on("cryptoPrices", (data) => {
+				// Ensure data is an array (or an array-like object)
+				if (Array.isArray(data)) {
+					data.forEach((coin, index) => {
+						if (coinMap.has(coin.symbol)) {
+							// Update existing row
+							const row = coinMap.get(coin.symbol);
+							row.querySelector(".price").textContent = `$${coin.price.toFixed(
+								2
+							)}`;
+							row.querySelector(".timestamp").textContent =
+								new Date().toLocaleString();
+						} else {
+							// Create a new row
+							const row = document.createElement("tr");
+							row.innerHTML = `
+                <td class="border px-4 py-2">${index + 1}</td>
+                <td class="border px-4 py-2">
+                  <img src="${coin.image}" alt="${coin.name}" class="w-8 h-8">
+                </td>
+                <td class="border px-4 py-2">${coin.name}</td>
+                <td class="border px-4 py-2">${coin.symbol.toUpperCase()}</td>
+                <td class="border px-4 py-2 text-right price">
+                  $${coin.price.toFixed(2)}
+                </td>
+                <td class="border px-4 py-2 timestamp">
+                  ${new Date().toLocaleString()}
+                </td>
+              `;
+							tableBody.appendChild(row);
+							coinMap.set(coin.symbol, row);
+						}
+					});
+				} else {
+					console.error("Received data is not an array");
+				}
+			});
+
+			// Error handling for WebSocket
+			socket.on("connect_error", () => {
+				console.error("WebSocket connection error");
+			});
+
+			socket.on("disconnect", () => {
+				console.warn("WebSocket disconnected");
 			});
 		</script>
 	</body>

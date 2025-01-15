@@ -19,7 +19,7 @@ const handlegetCoinData = async (req, res) => {
 			current_price: coin.current_price,
 		}));
 		// Send the data field from the response
-		return res.status(200).render("home", {
+		return res.status(200).json({
 			cryptocurrencies: coinsname,
 		});
 	} catch (error) {
