@@ -61,6 +61,7 @@ const WebSocket = require("ws");
 require("dotenv").config();
 const { cryptoNames, cryptoImages } = require("./assests/coin");
 const CryptoPrice = require("./models/CryptoPrice");
+const { monitorAlerts } = require("./controllers/alert");
 
 function handleSocketConnection(io) {
 	io.on("connection", (socket) => {
@@ -111,18 +112,21 @@ function handleSocketConnection(io) {
 						new: true,
 					}
 				);
+				// await monitorAlerts(cachedData);
 			} catch (err) {
-				console.log("Error while saving in the database", err.message);
+				console.log("Error while saving in the database", err);
 			}
 		});
 
 		// Emit the cached data to the frontend every 10 seconds
-		updateInterval = setInterval(() => {
+		updateInterval = setInterval(async () => {
 			// Convert the cached data to an array for sending to the frontend
 			const formattedData = Object.values(cachedData);
 			if (formattedData.length > 0) {
 				socket.emit("cryptoPrices", formattedData);
 			}
+			console.log("Checking alerts...");
+			await monitorAlerts(cachedData);
 		}, 5000);
 
 		binanceSocket.on("close", () => {

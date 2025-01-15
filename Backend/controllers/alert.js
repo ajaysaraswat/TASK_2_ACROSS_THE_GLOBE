@@ -29,16 +29,19 @@ const handlepostAlert = async (req, res) => {
 
 //function to monitor and check alerts
 
-const monitorAlerts = async (latestPrices) => {
+async function monitorAlerts(latestPrices) {
 	try {
 		const alerts = await Alert.find({ isTriggered: false });
 		for (const alert of alerts) {
+			console.log("alert", alert);
 			const { userId, symbol, condition, targetPrice } = alert;
 			if (latestPrices[symbol]) {
-				const currentPrice = latestPrices[symbol];
+				const currentPrice = latestPrices[symbol].price;
+				console.log("current price", currentPrice.price);
 				const conditionMet =
-					("greaterThan" && currentPrice > targetPrice) ||
-					("lessThan" && currentPrice < targetPrice);
+					(condition === "greaterThan" && currentPrice > targetPrice) ||
+					(condition === "lessThan" && currentPrice < targetPrice);
+				console.log("condition met", conditionMet);
 
 				if (conditionMet) {
 					alert.isTriggered = true;
@@ -50,13 +53,7 @@ const monitorAlerts = async (latestPrices) => {
 						await user.save();
 
 						//send email
-						sendEmailNotification(
-							user.email,
-							symbol,
-							currentPrice,
-							condition,
-							targetPrice
-						);
+						sendEmail(user.email, symbol, currentPrice, condition, targetPrice);
 					}
 				}
 			}
@@ -64,10 +61,9 @@ const monitorAlerts = async (latestPrices) => {
 	} catch (err) {
 		console.log("Error monitoring alerts", err);
 	}
-};
-
-sendEmail(email, symbol, currentPrice, condition, targetPrice);
+}
 
 module.exports = {
 	handlepostAlert,
+	monitorAlerts,
 };

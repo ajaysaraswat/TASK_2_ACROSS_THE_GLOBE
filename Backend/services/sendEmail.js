@@ -21,7 +21,7 @@ const sendEmail = async (
 		const conditionText = condition === "greaterThan" ? "above" : "below";
 
 		const mailOptions = {
-			from: process.env.EMAIL_USER,
+			from: process.env.USER,
 			to: email,
 			subject,
 			text: `Hello,
