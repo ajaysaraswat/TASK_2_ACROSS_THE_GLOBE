@@ -4,6 +4,8 @@ const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
 const handleSocketConnection = require("./socketHandler");
+const userRouter = require("./routes/user");
+const alertRouter = require("./routes/alert");
 const mongoose = require("mongoose");
 
 const app = express();
@@ -17,6 +19,9 @@ mongoose
 	.then(() => console.log("momgoDb connected"))
 	.catch((err) => console.log("connection error", err));
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 // Initialize socket handler
 handleSocketConnection(io);
 
@@ -28,6 +33,8 @@ app.get("/", (req, res) => {
 	res.render("home");
 	console.log("Server API initialized");
 });
+app.use("/", userRouter);
+app.use("/", alertRouter);
 
 server.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);

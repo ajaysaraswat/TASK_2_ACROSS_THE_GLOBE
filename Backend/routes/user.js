@@ -3,6 +3,6 @@ const { handlepostuser } = require("../controllers/user");
 
 const userRouter = express.Router();
 
-userRouter.get("/user", handlepostuser);
+userRouter.post("/user", handlepostuser);
 
 module.exports = userRouter;

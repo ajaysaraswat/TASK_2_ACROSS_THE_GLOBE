@@ -14,7 +14,7 @@ const handlepostuser = async (req, res) => {
 			.status(201)
 			.json({ status: "Created Successfully", message: user._id });
 	} catch (err) {
-		return res.redirect("/");
+		return res.status(400).json({ error: err.message });
 	}
 };
 
