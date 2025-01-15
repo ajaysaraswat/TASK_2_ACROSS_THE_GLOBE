@@ -60,6 +60,7 @@
 const WebSocket = require("ws");
 require("dotenv").config();
 const { cryptoNames, cryptoImages } = require("./assests/coin");
+const CryptoPrice = require("./models/CryptoPrice");
 
 function handleSocketConnection(io) {
 	io.on("connection", (socket) => {
@@ -75,7 +76,7 @@ function handleSocketConnection(io) {
 			console.log("Connected to Binance WebSocket for multiple currencies");
 		});
 
-		binanceSocket.on("message", (message) => {
+		binanceSocket.on("message", async (message) => {
 			const tradeData = JSON.parse(message);
 			//console.log("Trade Data:", tradeData); // Check if the data is correct
 
@@ -83,7 +84,7 @@ function handleSocketConnection(io) {
 			const symbol = streamName.split("@")[0].toUpperCase(); // Extract symbol (e.g., btcusdt, ethusdt)
 
 			// Update the cached data for the specific symbol
-			cachedData[symbol] = {
+			const priceData = {
 				price: parseFloat(tradeData.data.p), // Current trade price
 				quantity: tradeData.data.q, // Trade quantity
 				time: tradeData.data.T, // Trade time
@@ -91,6 +92,28 @@ function handleSocketConnection(io) {
 				name: cryptoNames[symbol], // Name based on the symbol
 				image: cryptoImages[symbol], // Image URL based on the symbol
 			};
+			cachedData[symbol] = priceData;
+
+			try {
+				await CryptoPrice.findOneAndUpdate(
+					{
+						symbol: symbol,
+					},
+					{
+						image: priceData.image,
+						name: priceData.name,
+						symbol: priceData.symbol,
+						currentPrice: priceData.price,
+						timestamp: new Date(priceData.time),
+					},
+					{
+						upsert: true,
+						new: true,
+					}
+				);
+			} catch (err) {
+				console.log("Error while saving in the database", err.message);
+			}
 		});
 
 		// Emit the cached data to the frontend every 10 seconds
