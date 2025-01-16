@@ -24,7 +24,6 @@ connecttoMongoDB("mongodb://127.0.0.1:27017/crypto");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParsar());
-// app.use(checkForAuthenticationCookie("uid"));
 
 // Initialize socket handler
 handleSocketConnection(io);
@@ -41,17 +40,6 @@ app.get("/alert/:symbol", (req, res) => {
 	console.log("Server API initialized");
 });
 
-// app.get("/curr", async (req, res) => {
-// 	const cacheValue = await client.get("coinsprice");
-// 	if (cacheValue) {
-// 		console.log("yes cached data");
-// 		return res.json(JSON.parse(cacheValue));
-// 	}
-// 	const data = await CryptoPrice.find({});
-// 	await client.set("coinsprice", JSON.stringify(data));
-// 	await client.expire("coinsprice", 30);
-// 	return res.json(data);
-// });
 app.use("/", coinRouter);
 app.use("/", userRouter);
 app.use("/", restrictedtousersigninonly, alertRouter);
