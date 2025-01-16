@@ -38,7 +38,7 @@ const monitorAlerts = async (latestPrices) => {
 		const alerts = await Alert.find({ isTriggered: false });
 		for (const alert of alerts) {
 			const { userId, symbol, condition, targetPrice } = alert;
-			console.log("userId", userId);
+			// console.log("userId", userId);
 			if (latestPrices[symbol]) {
 				const currentPrice = latestPrices[symbol].price;
 				// console.log("current price", currentPrice);
