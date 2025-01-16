@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-
+const { createHmac, randomBytes } = require("node:crypto");
+const { setuser } = require("../services/auth");
 const userSchema = new mongoose.Schema(
 	{
 		fullname: {

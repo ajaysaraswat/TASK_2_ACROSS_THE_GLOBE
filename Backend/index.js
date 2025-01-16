@@ -7,6 +7,8 @@ const handleSocketConnection = require("./socketHandler");
 const userRouter = require("./routes/user");
 const alertRouter = require("./routes/alert");
 const mongoose = require("mongoose");
+const cookieParsar = require("cookie-parser");
+const { restrictedtousersigninonly } = require("./middlewares/auth");
 
 const app = express();
 const PORT = 8000;
@@ -21,6 +23,8 @@ mongoose
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParsar());
+// app.use(checkForAuthenticationCookie("uid"));
 
 // Initialize socket handler
 handleSocketConnection(io);
@@ -34,7 +38,7 @@ app.get("/", (req, res) => {
 	console.log("Server API initialized");
 });
 app.use("/", userRouter);
-app.use("/", alertRouter);
+app.use("/", restrictedtousersigninonly, alertRouter);
 
 server.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);

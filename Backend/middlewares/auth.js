@@ -1,21 +1,23 @@
 const { getuser } = require("../services/auth");
 
-function checkForAuthenticationCookie(cookieName) {
-	return (req, res, next) => {
-		const tokenCookieValue = req.cookies[cookieName];
+const restrictedtousersigninonly = (req, res, next) => {
+	const userId = req.cookies?.uid;
+	if (!userId) return res.json({ message: "no userid find" });
+	console.log("userId", userId);
+	const user = getuser(userId);
+	console.log("user", user);
+	if (!user) return res.json({ message: "no user found" });
+	req.User = user;
+	next();
+};
 
-		if (!tokenCookieValue) {
-			return next();
-		}
-		try {
-			const userPayload = getuser(tokenCookieValue);
-			req.user = userPayload;
-		} catch (error) {}
-
-		return next();
-	};
-}
-
+const checkauth = (req, res, next) => {
+	const userId = req.cookies?.uid;
+	const user = getuser(userId);
+	req.user = user;
+	next();
+};
 module.exports = {
-	checkForAuthenticationCookie,
+	restrictedtousersigninonly,
+	checkauth,
 };

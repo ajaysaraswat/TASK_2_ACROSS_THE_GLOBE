@@ -4,7 +4,10 @@ const sendEmail = require("../services/sendEmail");
 
 const handlepostAlert = async (req, res) => {
 	try {
-		const { userId, symbol, condition, targetPrice } = req.body;
+		console.log("req.user", req.User._id);
+		const { symbol, condition, targetPrice } = req.body;
+		const userId = req.User._id;
+		// const userId = req.user
 		if (!userId || !symbol || !condition || !targetPrice) {
 			return res.status(400).json({ error: "all target fields are required" });
 		}
@@ -33,7 +36,7 @@ async function monitorAlerts(latestPrices) {
 	try {
 		const alerts = await Alert.find({ isTriggered: false });
 		for (const alert of alerts) {
-			console.log("alert", alert);
+			// console.log("alert", alert);
 			const { userId, symbol, condition, targetPrice } = alert;
 			if (latestPrices[symbol]) {
 				const currentPrice = latestPrices[symbol].price;
