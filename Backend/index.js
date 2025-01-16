@@ -6,9 +6,9 @@ const { Server } = require("socket.io");
 const handleSocketConnection = require("./socketHandler");
 const userRouter = require("./routes/user");
 const alertRouter = require("./routes/alert");
-const mongoose = require("mongoose");
 const cookieParsar = require("cookie-parser");
 const { restrictedtousersigninonly } = require("./middlewares/auth");
+const { connecttoMongoDB } = require("./connection");
 
 const app = express();
 const PORT = 8000;
@@ -16,10 +16,7 @@ const PORT = 8000;
 const server = http.createServer(app);
 const io = new Server(server);
 
-mongoose
-	.connect("mongodb://127.0.0.1:27017/crypto")
-	.then(() => console.log("momgoDb connected"))
-	.catch((err) => console.log("connection error", err));
+connecttoMongoDB("mongodb://127.0.0.1:27017/crypto");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
