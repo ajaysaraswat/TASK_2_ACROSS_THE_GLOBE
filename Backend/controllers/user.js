@@ -10,9 +10,10 @@ const handlepostuser = async (req, res) => {
 			password: body.password,
 		});
 
-		return res
-			.status(201)
-			.json({ status: "Created Successfully", message: user._id });
+		// return res
+		// 	.status(201)
+		// 	.json({ status: "Created Successfully", message: user._id });
+		return res.redirect("/user/signin");
 	} catch (err) {
 		return res.status(400).json({ error: err.message });
 	}
@@ -25,20 +26,31 @@ const handlepostsignin = async (req, res) => {
 		const uid = await User.matchPasswordandGenerateToken(email, password);
 
 		res.cookie("uid", uid);
-		return res.json({ message: uid });
+		res.render("home");
+		// return res.json({ message: uid });
 	} catch (err) {
-		// return res.redirect("/user/signup", {
-		// 	message: "Invalid user or password",
-		// });
-		return res.json({ message: err.message });
+		return res.redirect("/user", {
+			message: "Invalid user or password",
+		});
+		//return res.json({ message: err.message });
 	}
 };
 
 const handlelogout = (req, res) => {
 	res.clearCookie("uid").redirect("/user/signin");
 };
+
+const handlegetuser = (req, res) => {
+	return res.render("register");
+};
+
+const handlegetsignin = (req, res) => {
+	return res.render("login");
+};
 module.exports = {
 	handlepostuser,
 	handlepostsignin,
 	handlelogout,
+	handlegetuser,
+	handlegetsignin,
 };

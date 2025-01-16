@@ -48,13 +48,13 @@ const monitorAlerts = async (latestPrices) => {
 
 				if (conditionMet) {
 					alert.isTriggered = true;
-					await alert.save();
+					//await alert.save();
 
 					const user = await User.findById(userId);
 					console.log("user ofr email", user);
 					if (user) {
 						user.alerts.push(alert._id);
-						// await user.save();
+						// user.save();
 
 						//send email
 						console.log("function called before");

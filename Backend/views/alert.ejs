@@ -17,7 +17,12 @@
 				<h1 class="text-2xl font-bold mb-6 text-center text-white">
 					Set Your Cryptocurrency Alert
 				</h1>
-				<form id="crypto-alert-form" class="space-y-6">
+				<form
+					id="crypto-alert-form"
+					class="space-y-6"
+					action="/alert"
+					method="post"
+				>
 					<!-- Symbol Input -->
 					<div>
 						<label
@@ -81,7 +86,7 @@
 							Submit
 						</button>
 						<a
-							href="/add-alert"
+							href="/alert"
 							class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-bold rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition"
 						>
 							<svg

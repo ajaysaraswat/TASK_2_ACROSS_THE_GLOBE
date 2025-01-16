@@ -133,7 +133,7 @@ function handleSocketConnection(io) {
 		});
 
 		binanceSocket.on("error", (err) => {
-			console.error("WebSocket error:", err.message);
+			console.error("WebSocket error:", err);
 		});
 
 		socket.on("disconnect", () => {
