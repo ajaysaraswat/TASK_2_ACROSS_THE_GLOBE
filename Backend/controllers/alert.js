@@ -8,7 +8,7 @@ const handlepostAlert = async (req, res) => {
 		//console.log("req.user", req.User._id);
 		const { symbol, condition, targetPrice } = req.body;
 		const userId = req.User._id;
-		// const userId = req.user
+		// const user = req.User
 		if (!userId || !symbol || !condition || !targetPrice) {
 			return res.status(400).json({ error: "all target fields are required" });
 		}
@@ -41,20 +41,20 @@ const monitorAlerts = async (latestPrices) => {
 			console.log("userId", userId);
 			if (latestPrices[symbol]) {
 				const currentPrice = latestPrices[symbol].price;
-				console.log("current price", currentPrice);
+				// console.log("current price", currentPrice);
 				const conditionMet =
 					(condition === "greaterThan" && currentPrice > targetPrice) ||
 					(condition === "lessThan" && currentPrice < targetPrice);
 
 				if (conditionMet) {
 					alert.isTriggered = true;
-					//await alert.save();
+					await alert.save();
 
 					const user = await User.findById(userId);
-					console.log("user ofr email", user);
+					// console.log("user ofr email", user);
 					if (user) {
 						user.alerts.push(alert._id);
-						// user.save();
+						user.save();
 
 						//send email
 						console.log("function called before");
@@ -68,8 +68,18 @@ const monitorAlerts = async (latestPrices) => {
 		console.log("Error monitoring alerts", err);
 	}
 };
+const handlegetalert = (req, res) => {
+	const symbol = req.params.symbol;
+	console.log("req.user", req.User);
+	res.render("alert", {
+		symbol: symbol,
+		userId: req.User,
+	});
+	console.log("Server API initialized");
+};
 
 module.exports = {
 	handlepostAlert,
 	monitorAlerts,
+	handlegetalert,
 };

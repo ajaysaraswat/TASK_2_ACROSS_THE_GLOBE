@@ -24,58 +24,55 @@
 					method="post"
 				>
 					<!-- Symbol Input -->
-					<div>
-						<label
-							for="symbol"
-							class="block text-sm font-medium text-gray-200 mb-2"
-							>Cryptocurrency Symbol</label
-						>
-						<input
-							type="text"
-							id="symbol"
-							name="symbol"
-							placeholder="e.g., BTC"
-							class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
-							required
-							value="<%= symbol %>"
-							readonly
-						/>
-					</div>
+
+					<label
+						for="symbol"
+						class="block text-sm font-medium text-gray-200 mb-2"
+						>Cryptocurrency Symbol</label
+					>
+					<input
+						type="text"
+						id="symbol"
+						name="symbol"
+						placeholder="e.g., BTC"
+						class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
+						required
+						value="<%= symbol %>"
+						readonly
+					/>
 
 					<!-- Condition Dropdown -->
-					<div>
-						<label
-							for="condition"
-							class="block text-sm font-medium text-gray-200 mb-2"
-							>Condition</label
-						>
-						<select
-							id="condition"
-							name="condition"
-							class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
-							required
-						>
-							<option value="greaterThan">Greater Than</option>
-							<option value="lessThan">Less Than</option>
-						</select>
-					</div>
+
+					<label
+						for="condition"
+						class="block text-sm font-medium text-gray-200 mb-2"
+						>Condition</label
+					>
+					<select
+						id="condition"
+						name="condition"
+						class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
+						required
+					>
+						<option value="greaterThan">Greater Than</option>
+						<option value="lessThan">Less Than</option>
+					</select>
 
 					<!-- Target Price Input -->
-					<div>
-						<label
-							for="targetPrice"
-							class="block text-sm font-medium text-gray-200 mb-2"
-							>Target Price (USD)</label
-						>
-						<input
-							type="number"
-							id="targetPrice"
-							name="targetPrice"
-							placeholder="e.g., 50000"
-							class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
-							required
-						/>
-					</div>
+
+					<label
+						for="targetPrice"
+						class="block text-sm font-medium text-gray-200 mb-2"
+						>Target Price (USD)</label
+					>
+					<input
+						type="number"
+						id="targetPrice"
+						name="targetPrice"
+						placeholder="e.g., 50000"
+						class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
+						required
+					/>
 
 					<!-- Submit Button -->
 					<div class="text-center">

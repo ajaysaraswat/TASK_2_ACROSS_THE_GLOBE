@@ -29,9 +29,7 @@ const handlepostsignin = async (req, res) => {
 		res.render("home");
 		// return res.json({ message: uid });
 	} catch (err) {
-		return res.redirect("/user", {
-			message: "Invalid user or password",
-		});
+		return res.redirect("/");
 		//return res.json({ message: err.message });
 	}
 };

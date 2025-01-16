@@ -8,10 +8,8 @@ const userRouter = require("./routes/user");
 const alertRouter = require("./routes/alert");
 const coinRouter = require("./routes/coin");
 const cookieParsar = require("cookie-parser");
-const { restrictedtousersigninonly } = require("./middlewares/auth");
+const { restrictedtousersigninonly, checkauth } = require("./middlewares/auth");
 const { connecttoMongoDB } = require("./connection");
-const CryptoPrice = require("./models/CryptoPrice");
-const client = require("./Redis/client");
 
 const app = express();
 const PORT = 8000;
@@ -32,15 +30,7 @@ app.use(express.static("./views"));
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
-app.get("/alert/:symbol", (req, res) => {
-	const symbol = req.params.symbol;
-	res.render("alert", {
-		symbol: symbol,
-	});
-	console.log("Server API initialized");
-});
-
-app.use("/", coinRouter);
+app.use("/", checkauth, coinRouter);
 app.use("/", userRouter);
 app.use("/", restrictedtousersigninonly, alertRouter);
 
