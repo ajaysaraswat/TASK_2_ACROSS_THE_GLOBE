@@ -6,9 +6,12 @@ const { Server } = require("socket.io");
 const handleSocketConnection = require("./socketHandler");
 const userRouter = require("./routes/user");
 const alertRouter = require("./routes/alert");
+const coinRouter = require("./routes/coin");
 const cookieParsar = require("cookie-parser");
 const { restrictedtousersigninonly } = require("./middlewares/auth");
 const { connecttoMongoDB } = require("./connection");
+const CryptoPrice = require("./models/CryptoPrice");
+const client = require("./Redis/client");
 
 const app = express();
 const PORT = 8000;
@@ -30,10 +33,23 @@ app.use(express.static("./views"));
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
-app.get("/", (req, res) => {
-	res.render("home");
-	console.log("Server API initialized");
-});
+// app.get("/", (req, res) => {
+// 	res.render("home");
+// 	console.log("Server API initialized");
+// });
+
+// app.get("/curr", async (req, res) => {
+// 	const cacheValue = await client.get("coinsprice");
+// 	if (cacheValue) {
+// 		console.log("yes cached data");
+// 		return res.json(JSON.parse(cacheValue));
+// 	}
+// 	const data = await CryptoPrice.find({});
+// 	await client.set("coinsprice", JSON.stringify(data));
+// 	await client.expire("coinsprice", 30);
+// 	return res.json(data);
+// });
+app.use("/", coinRouter);
 app.use("/", userRouter);
 app.use("/", restrictedtousersigninonly, alertRouter);
 
