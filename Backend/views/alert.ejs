@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link href="/dist/main.css" rel="stylesheet" />
+		<script src="https://cdn.tailwindcss.com"></script>
+	</head>
+	<body class="text-gray-100 min-h-screen flex flex-col items-center mt-10">
+		<header class="w-full fixed top-0 bg-blue-600 text-white shadow-md z-50">
+			<div class="container mx-auto"><%- include('./partials/nav') %></div>
+		</header>
+
+		<!-- Main Content -->
+		<main class="flex-1 w-full max-w-lg mt-10">
+			<div class="bg-gray-800 rounded-lg shadow-lg p-6">
+				<h1 class="text-2xl font-bold mb-6 text-center text-white">
+					Set Your Cryptocurrency Alert
+				</h1>
+				<form id="crypto-alert-form" class="space-y-6">
+					<!-- Symbol Input -->
+					<div>
+						<label
+							for="symbol"
+							class="block text-sm font-medium text-gray-200 mb-2"
+							>Cryptocurrency Symbol</label
+						>
+						<input
+							type="text"
+							id="symbol"
+							name="symbol"
+							placeholder="e.g., BTC"
+							class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
+							required
+							value="<%= symbol %>"
+							readonly
+						/>
+					</div>
+
+					<!-- Condition Dropdown -->
+					<div>
+						<label
+							for="condition"
+							class="block text-sm font-medium text-gray-200 mb-2"
+							>Condition</label
+						>
+						<select
+							id="condition"
+							name="condition"
+							class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
+							required
+						>
+							<option value="greaterThan">Greater Than</option>
+							<option value="lessThan">Less Than</option>
+						</select>
+					</div>
+
+					<!-- Target Price Input -->
+					<div>
+						<label
+							for="targetPrice"
+							class="block text-sm font-medium text-gray-200 mb-2"
+							>Target Price (USD)</label
+						>
+						<input
+							type="number"
+							id="targetPrice"
+							name="targetPrice"
+							placeholder="e.g., 50000"
+							class="w-full rounded-lg border-gray-700 bg-gray-900 text-gray-100 px-4 py-2 focus:ring focus:ring-blue-500"
+							required
+						/>
+					</div>
+
+					<!-- Submit Button -->
+					<div class="text-center">
+						<button
+							type="submit"
+							class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring focus:ring-blue-500 transition"
+						>
+							Submit
+						</button>
+						<a
+							href="/add-alert"
+							class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-bold rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								class="w-5 h-5 mr-2"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M12 4v16m8-8H4"
+								/>
+							</svg>
+							Add Alert
+						</a>
+					</div>
+				</form>
+			</div>
+		</main>
+
+		<footer class="py-4 bg-gray-800 text-white text-center w-full">
+			<p>© 2025 Crypto Monitor. All Rights Reserved.</p>
+		</footer>
+
+		<!-- Flowbite Script -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+	</body>
+</html>

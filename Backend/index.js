@@ -33,10 +33,13 @@ app.use(express.static("./views"));
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
-// app.get("/", (req, res) => {
-// 	res.render("home");
-// 	console.log("Server API initialized");
-// });
+app.get("/alert/:symbol", (req, res) => {
+	const symbol = req.params.symbol;
+	res.render("alert", {
+		symbol: symbol,
+	});
+	console.log("Server API initialized");
+});
 
 // app.get("/curr", async (req, res) => {
 // 	const cacheValue = await client.get("coinsprice");
