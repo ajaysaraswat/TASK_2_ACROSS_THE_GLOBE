@@ -6,6 +6,7 @@ const sendEmail = async (
 	condition,
 	targetPrice
 ) => {
+	console.log("email function run");
 	try {
 		const transporter = nodemailer.createTransport({
 			host: process.env.HOST,

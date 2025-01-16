@@ -1,5 +1,3 @@
-// // socketHandler.js
-
 // const WebSocket = require("ws");
 // require("dotenv").config();
 // const { cryptoNames, cryptoImages } = require("./assests/coin");
@@ -125,7 +123,7 @@ function handleSocketConnection(io) {
 			if (formattedData.length > 0) {
 				socket.emit("cryptoPrices", formattedData);
 			}
-			console.log("Checking alerts...");
+			//	console.log("Checking alerts...");
 			await monitorAlerts(cachedData);
 		}, 5000);
 

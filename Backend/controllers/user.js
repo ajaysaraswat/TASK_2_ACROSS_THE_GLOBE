@@ -25,11 +25,12 @@ const handlepostsignin = async (req, res) => {
 		const uid = await User.matchPasswordandGenerateToken(email, password);
 
 		res.cookie("uid", uid);
-		return res.redirect("/");
+		return res.json({ message: uid });
 	} catch (err) {
-		return res.redirect("/user/signup", {
-			message: "Invalid user or password",
-		});
+		// return res.redirect("/user/signup", {
+		// 	message: "Invalid user or password",
+		// });
+		return res.json({ message: err.message });
 	}
 };
 

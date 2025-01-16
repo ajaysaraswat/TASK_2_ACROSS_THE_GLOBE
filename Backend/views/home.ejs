@@ -6,7 +6,7 @@
 		<title>Cryptocurrency Prices</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
-	<body class="bg-gray-100 min-h-screen flex flex-col">
+	<body class="bg-[#0D1217] min-h-screen flex flex-col text-white">
 		<!-- Header -->
 		<header class="w-full fixed top-0 bg-blue-600 text-white shadow-md z-50">
 			<div class="container mx-auto"><%- include('./partials/nav') %></div>
@@ -14,8 +14,8 @@
 
 		<!-- Main Content -->
 		<main class="mt-20 w-full max-w-4xl mx-auto">
-			<div class="bg-white shadow-md rounded-lg overflow-hidden">
-				<table class="table-auto w-full border-collapse">
+			<div class="bg-[#0D1217] shadow-md rounded-lg overflow-hidden">
+				<table class="table-auto w-full">
 					<thead class="bg-blue-600 text-white">
 						<tr>
 							<th class="px-4 py-2 text-left">#</th>
@@ -26,7 +26,7 @@
 							<th class="px-4 py-2 text-left">Timestamp</th>
 						</tr>
 					</thead>
-					<tbody id="crypto-table">
+					<tbody id="crypto-table" class="divide-y divide-gray-600">
 						<!-- Dynamic rows will be inserted here -->
 					</tbody>
 				</table>
@@ -62,29 +62,24 @@
 						} else {
 							// Create a new row for the new currency
 							const row = document.createElement("tr");
+							row.className = "hover:bg-gray-700";
 							row.innerHTML = `
-					<td class="border px-4 py-2 index"></td>
-					<td class="border px-4 py-2">
-						<img src="${coin.image}" alt="${coin.name}" class="w-8 h-8">
-					</td>
-					<td class="border px-4 py-2">${coin.name}</td>
-					<td class="border px-4 py-2">${coin.symbol.toUpperCase()}</td>
-					<td class="border px-4 py-2 text-right price">
-						$${coin.price.toFixed(2)}
-					</td>
-					<td class="border px-4 py-2 timestamp">
-						${new Date().toLocaleString()}
-					</td>
-				`;
+						<td class="px-4 py-2">${index + 1}</td>
+						<td class="px-4 py-2">
+							<img src="${coin.image}" alt="${coin.name}" class="w-8 h-8 rounded-full">
+						</td>
+						<td class="px-4 py-2">${coin.name}</td>
+						<td class="px-4 py-2">${coin.symbol.toUpperCase()}</td>
+						<td class="px-4 py-2 text-right text-white price">
+							$${coin.price.toFixed(2)}
+						</td>
+						<td class="px-4 py-2 text-yellow-500 timestamp">
+							${new Date().toLocaleString()}
+						</td>
+					`;
 							tableBody.appendChild(row);
 							coinMap.set(coin.symbol, row);
 						}
-					});
-
-					// Update the index for all rows
-					let rowIndex = 1;
-					coinMap.forEach((row) => {
-						row.querySelector(".index").textContent = rowIndex++;
 					});
 				} else {
 					console.error("Received data is not an array");

@@ -5,7 +5,7 @@ const { setCache, getCache } = require("../Redis/utils");
 
 const handlepostAlert = async (req, res) => {
 	try {
-		console.log("req.user", req.User._id);
+		//console.log("req.user", req.User._id);
 		const { symbol, condition, targetPrice } = req.body;
 		const userId = req.User._id;
 		// const userId = req.user
@@ -33,47 +33,41 @@ const handlepostAlert = async (req, res) => {
 
 //function to monitor and check alerts
 
-async function monitorAlerts(latestPrices) {
+const monitorAlerts = async (latestPrices) => {
 	try {
 		const alerts = await Alert.find({ isTriggered: false });
 		for (const alert of alerts) {
-			// console.log("alert", alert);
 			const { userId, symbol, condition, targetPrice } = alert;
+			console.log("userId", userId);
+			if (latestPrices[symbol]) {
+				const currentPrice = latestPrices[symbol].price;
+				console.log("current price", currentPrice);
+				const conditionMet =
+					(condition === "greaterThan" && currentPrice > targetPrice) ||
+					(condition === "lessThan" && currentPrice < targetPrice);
 
-			let currentPrice = await getCache(symbol);
+				if (conditionMet) {
+					alert.isTriggered = true;
+					await alert.save();
 
-			if (!currentPrice) {
-				if (latestPrices[symbol]) {
-					currentPrice = latestPrices[symbol];
-					await setCache(symbol, currentPrice, 300); // Cache for 5 minutes
-				} else {
-					continue; // Skip if no price is available
-				}
-			}
-			// console.log("current price", currentPrice.price);
-			const conditionMet =
-				(condition === "greaterThan" && currentPrice > targetPrice) ||
-				(condition === "lessThan" && currentPrice < targetPrice);
-			// console.log("condition met", conditionMet);
+					const user = await User.findById(userId);
+					console.log("user ofr email", user);
+					if (user) {
+						user.alerts.push(alert._id);
+						// await user.save();
 
-			if (conditionMet) {
-				alert.isTriggered = true;
-				await alert.save();
-
-				const user = await User.findById(userId);
-				if (user) {
-					user.alerts.push(alert._id);
-					await user.save();
-
-					//send email
-					sendEmail(user.email, symbol, currentPrice, condition, targetPrice);
+						//send email
+						console.log("function called before");
+						sendEmail(user.email, symbol, currentPrice, condition, targetPrice);
+						console.log("function called after");
+					}
 				}
 			}
 		}
 	} catch (err) {
 		console.log("Error monitoring alerts", err);
 	}
-}
+};
 
 module.exports = {
 	handlepostAlert,
